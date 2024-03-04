@@ -12,6 +12,11 @@ body {
   height: 100%;
 }
 
+input,
+button {
+  outline: none !important;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
