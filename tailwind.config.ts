@@ -18,6 +18,9 @@ const config = {
       },
     },
     extend: {
+      screens: {
+        xs: "481px",
+      },
       spacing: {
         sidebar: "var(--sidebar-width)",
         "org-sidebar": "var(--org-sidebar-width)",
