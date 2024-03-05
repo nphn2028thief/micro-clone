@@ -14,7 +14,7 @@ export default function DashboardPage({
   const { organization } = useOrganization();
 
   return (
-    <div className="h-[calc(100%_-_64px)] p-3">
+    <div className="h-[calc(100%_-_64px)] p-3 overflow-auto">
       {organization ? (
         <BoardList orgId={organization.id} search={searchParams.search} />
       ) : (

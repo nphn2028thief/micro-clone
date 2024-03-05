@@ -47,7 +47,9 @@ const EmptyBoard = () => {
         </Button>
       </div>
 
-      {isPending ? <Loading /> : null}
+      {isPending ? (
+        <Loading className="fixed inset-0 bg-black/10 z-[999]" />
+      ) : null}
     </div>
   );
 };

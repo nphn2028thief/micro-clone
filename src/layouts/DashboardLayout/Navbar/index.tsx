@@ -45,7 +45,9 @@ const Navbar = () => {
         />
       </div>
       {organization ? <InviteButton /> : null}
-      <UserButton />
+      <div className="hidden md:block">
+        <UserButton />
+      </div>
     </nav>
   );
 };
