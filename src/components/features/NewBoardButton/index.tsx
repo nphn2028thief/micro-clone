@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -7,6 +8,7 @@ import Loading from "@/components/common/Loading";
 import useApiMutation from "@/hooks/useApiMutation";
 import { cn } from "@/lib/utils";
 import { IBoardCreateRequest } from "@/types/board";
+import { EPath } from "@/constants/path";
 
 interface IProps {
   orgId: string;
@@ -15,6 +17,8 @@ interface IProps {
 
 const NewBoardButton = (props: IProps) => {
   const { orgId, disabled = false } = props;
+
+  const router = useRouter();
 
   const { mutate, isPending } = useApiMutation<IBoardCreateRequest>(
     api.board.create
@@ -25,7 +29,10 @@ const NewBoardButton = (props: IProps) => {
       orgId,
       title: "Untitled",
     })
-      .then(() => toast.success("Board created!"))
+      .then((id) => {
+        toast.success("Board created!");
+        router.push(`${EPath.BOARD}/${id}`);
+      })
       .catch(() => toast.error("Create board failure!"));
   };
 

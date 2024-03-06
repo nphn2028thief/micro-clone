@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useOrganization } from "@clerk/nextjs";
 import toast from "react-hot-toast";
 
@@ -14,6 +14,7 @@ import { IBoardCreateRequest } from "@/types/board";
 import { EPath } from "@/constants/path";
 
 const EmptyBoard = () => {
+  const router = useRouter();
   const pathname = usePathname();
 
   const { organization } = useOrganization();
@@ -29,7 +30,10 @@ const EmptyBoard = () => {
       orgId: organization.id,
       title: "Untitled",
     })
-      .then(() => toast.success("Board created!"))
+      .then((id) => {
+        toast.success("Board created!");
+        router.push(`${EPath.BOARD}/${id}`);
+      })
       .catch(() => toast.error("Create board failure!"));
   };
 
