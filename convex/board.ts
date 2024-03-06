@@ -103,3 +103,105 @@ export const remove = mutation({
     }
   },
 });
+
+export const favorite = mutation({
+  args: {
+    id: v.id("boards"),
+    orgId: v.string(),
+  },
+  async handler(ctx, args) {
+    const id = args.id;
+    const orgId = args.orgId;
+
+    if (!id || !orgId) {
+      return new ConvexError("Invalid data!");
+    }
+
+    try {
+      const userIdentity = await ctx.auth.getUserIdentity();
+
+      if (!userIdentity) {
+        throw new ConvexError("Unauthorize");
+      }
+
+      const board = await ctx.db.get(args.id);
+
+      if (!board) {
+        return new ConvexError("Board not found!");
+      }
+
+      const userId = userIdentity.subject;
+
+      const existingFavorite = await ctx.db
+        .query("userFavorites")
+        .withIndex("by_user_org_board", (q) =>
+          q
+            .eq("userId", userId)
+            .eq("orgId", board.orgId)
+            .eq("boardId", board._id)
+        )
+        .unique();
+
+      if (existingFavorite) {
+        throw new ConvexError("Board already favorited!");
+      }
+
+      await ctx.db.insert("userFavorites", {
+        userId,
+        orgId,
+        boardId: board._id,
+      });
+    } catch (error) {
+      throw new ConvexError("Oops! Something went wrong!");
+    }
+  },
+});
+
+export const unfavorite = mutation({
+  args: {
+    id: v.id("boards"),
+    orgId: v.string(),
+  },
+  async handler(ctx, args) {
+    const id = args.id;
+    const orgId = args.orgId;
+
+    if (!id || !orgId) {
+      return new ConvexError("Invalid data!");
+    }
+
+    try {
+      const userIdentity = await ctx.auth.getUserIdentity();
+
+      if (!userIdentity) {
+        throw new ConvexError("Unauthorize");
+      }
+
+      const board = await ctx.db.get(args.id);
+
+      if (!board) {
+        return new ConvexError("Board not found!");
+      }
+
+      const userId = userIdentity.subject;
+
+      const existingFavorite = await ctx.db
+        .query("userFavorites")
+        .withIndex("by_user_org_board", (q) =>
+          q
+            .eq("userId", userId)
+            .eq("orgId", board.orgId)
+            .eq("boardId", board._id)
+        )
+        .unique();
+
+      if (!existingFavorite) {
+        throw new ConvexError("Favorited board not found!");
+      }
+
+      await ctx.db.delete(existingFavorite._id);
+    } catch (error) {
+      throw new ConvexError("Oops! Something went wrong!");
+    }
+  },
+});

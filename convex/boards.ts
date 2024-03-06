@@ -19,7 +19,22 @@ export const get = query({
         .order("desc")
         .collect();
 
-      return boards;
+      const boardsWithFavoriteRelation = boards.map((item) => {
+        return ctx.db
+          .query("userFavorites")
+          .withIndex("by_user_board", (q) =>
+            q.eq("userId", userIdentity.subject).eq("boardId", item._id)
+          )
+          .unique()
+          .then((favorite) => ({
+            ...item,
+            isFavorite: !!favorite,
+          }));
+      });
+
+      const boardsWithFavoriteBoolean = Promise.all(boardsWithFavoriteRelation);
+
+      return boardsWithFavoriteBoolean;
     } catch (error) {
       throw new ConvexError("Oops! Something went wrong!");
     }
