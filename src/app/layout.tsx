@@ -24,7 +24,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ConvexClientProvider>
           <CheckScreen>{children}</CheckScreen>
-          <Toaster position="top-right" />
+          <Toaster position="top-center" />
         </ConvexClientProvider>
       </body>
     </html>
