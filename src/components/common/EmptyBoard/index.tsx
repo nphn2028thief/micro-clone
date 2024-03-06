@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useOrganization } from "@clerk/nextjs";
 import toast from "react-hot-toast";
 
@@ -10,8 +11,11 @@ import { Button } from "@/components/ui/button";
 import Loading from "../Loading";
 import useApiMutation from "@/hooks/useApiMutation";
 import { IBoardCreateRequest } from "@/types/board";
+import { EPath } from "@/constants/path";
 
 const EmptyBoard = () => {
+  const pathname = usePathname();
+
   const { organization } = useOrganization();
 
   const { mutate, isPending } = useApiMutation<IBoardCreateRequest>(
@@ -39,13 +43,16 @@ const EmptyBoard = () => {
       />
       <h2 className="text-2xl font-semibold mt-6">Create your first board!</h2>
       <p className="text-muted-foreground text-sm mt-2">
-        Start by creating a board for your organization
+        Start by creating a board for your organization{" "}
+        {pathname.includes(EPath.FAVORITE) && "in Team boards"}
       </p>
-      <div className="mt-6">
-        <Button size="lg" onClick={handleCreateBoard}>
-          Create board
-        </Button>
-      </div>
+      {pathname.includes(EPath.FAVORITE) ? null : (
+        <div className="mt-6">
+          <Button size="lg" onClick={handleCreateBoard}>
+            Create board
+          </Button>
+        </div>
+      )}
 
       {isPending ? (
         <Loading className="fixed inset-0 bg-black/10 z-[999]" />

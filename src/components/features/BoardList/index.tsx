@@ -23,7 +23,11 @@ const BoardList = (props: IProps) => {
 
   const pathname = usePathname();
 
-  const boards = useQuery(api.boards.get, { orgId });
+  const boards = useQuery(api.boards.get, {
+    orgId,
+    search,
+    favorite: pathname.split("/")[1],
+  });
 
   if (!boards) {
     return (
@@ -60,7 +64,9 @@ const BoardList = (props: IProps) => {
         {pathname.includes(EPath.FAVORITE) ? "Favorite boards" : "Team boards"}
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6 gap-4 pb-10">
-        <NewBoardButton orgId={orgId} />
+        {pathname.includes(EPath.FAVORITE) ? null : (
+          <NewBoardButton orgId={orgId} />
+        )}
         {boards.map((item) => (
           <BoardItem key={item._id} data={item} />
         ))}
