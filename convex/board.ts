@@ -20,6 +20,13 @@ export const create = mutation({
     title: v.string(),
   },
   async handler(ctx, args) {
+    const orgId = args.orgId;
+    const title = args.title.trim();
+
+    if (!orgId || !title) {
+      throw new ConvexError("Invalid data!");
+    }
+
     try {
       const userIdentity = await ctx.auth.getUserIdentity();
 
@@ -27,10 +34,20 @@ export const create = mutation({
         throw new ConvexError("Unauthorize");
       }
 
+      const existBoard = await ctx.db
+        .query("boards")
+        .withIndex("by_org", (query) => query.eq("orgId", args.orgId))
+        .order("desc")
+        .collect();
+
+      const adjustedTitle = existBoard
+        ? `${args.title} ${existBoard.length + 1}`
+        : `${args.title} 1`;
+
       const randomImage = images[Math.floor(Math.random() * images.length)];
 
       const createdBoard = await ctx.db.insert("boards", {
-        title: args.title,
+        title: adjustedTitle,
         orgId: args.orgId,
         authorId: userIdentity.subject,
         authorName: userIdentity.name!,
@@ -38,6 +55,49 @@ export const create = mutation({
       });
 
       return createdBoard;
+    } catch (error) {
+      throw new ConvexError("Oops! Something went wrong!");
+    }
+  },
+});
+
+export const update = mutation({
+  args: {
+    id: v.id("boards"),
+    title: v.string(),
+  },
+  async handler(ctx, args) {
+    try {
+      const userIdentity = await ctx.auth.getUserIdentity();
+
+      if (!userIdentity) {
+        throw new ConvexError("Unauthorize");
+      }
+
+      const updatedBoard = await ctx.db.patch(args.id, {
+        title: args.title,
+      });
+
+      return updatedBoard;
+    } catch (error) {
+      throw new ConvexError("Oops! Something went wrong!");
+    }
+  },
+});
+
+export const remove = mutation({
+  args: {
+    id: v.id("boards"),
+  },
+  async handler(ctx, args) {
+    try {
+      const userIdentity = await ctx.auth.getUserIdentity();
+
+      if (!userIdentity) {
+        throw new ConvexError("Unauthorize");
+      }
+
+      await ctx.db.delete(args.id);
     } catch (error) {
       throw new ConvexError("Oops! Something went wrong!");
     }

@@ -14,3 +14,8 @@ export interface IBoardResponse {
   authorName: string;
   imageUrl: string;
 }
+
+export interface IBoardUpdateRequest {
+  id: string;
+  title: string;
+}
