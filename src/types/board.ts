@@ -13,9 +13,15 @@ export interface IBoardResponse {
   authorId: string;
   authorName: string;
   imageUrl: string;
+  isFavorite: boolean;
 }
 
 export interface IBoardUpdateRequest {
   id: string;
   title: string;
+}
+
+export interface IFavoriteRequest {
+  id: string;
+  orgId: string;
 }
