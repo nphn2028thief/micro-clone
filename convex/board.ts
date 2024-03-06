@@ -97,6 +97,19 @@ export const remove = mutation({
         throw new ConvexError("Unauthorize");
       }
 
+      const userId = userIdentity.subject;
+
+      const existingFavorite = await ctx.db
+        .query("userFavorites")
+        .withIndex("by_user_board", (q) =>
+          q.eq("userId", userId).eq("boardId", args.id)
+        )
+        .unique();
+
+      if (existingFavorite) {
+        await ctx.db.delete(existingFavorite._id);
+      }
+
       await ctx.db.delete(args.id);
     } catch (error) {
       throw new ConvexError("Oops! Something went wrong!");
@@ -134,11 +147,8 @@ export const favorite = mutation({
 
       const existingFavorite = await ctx.db
         .query("userFavorites")
-        .withIndex("by_user_org_board", (q) =>
-          q
-            .eq("userId", userId)
-            .eq("orgId", board.orgId)
-            .eq("boardId", board._id)
+        .withIndex("by_user_board", (q) =>
+          q.eq("userId", userId).eq("boardId", board._id)
         )
         .unique();
 
@@ -187,11 +197,8 @@ export const unfavorite = mutation({
 
       const existingFavorite = await ctx.db
         .query("userFavorites")
-        .withIndex("by_user_org_board", (q) =>
-          q
-            .eq("userId", userId)
-            .eq("orgId", board.orgId)
-            .eq("boardId", board._id)
+        .withIndex("by_user_board", (q) =>
+          q.eq("userId", userId).eq("boardId", board._id)
         )
         .unique();
 
