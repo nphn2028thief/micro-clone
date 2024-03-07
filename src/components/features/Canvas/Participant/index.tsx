@@ -14,7 +14,7 @@ const CanvaParticipant = () => {
   const hasMoreUsers = users.length > MAX_SHOW_USERS;
 
   return (
-    <div className="absolute top-2 right-2 bg-white rounded-md px-4 py-1.5 shadow-md">
+    <div className="absolute top-3 right-2 bg-white rounded-md px-4 py-1.5 shadow-md">
       <div className="flex gap-2">
         {users.slice(0, MAX_SHOW_USERS).map(({ connectionId, info }) => (
           <UserAvatar
