@@ -1,4 +1,4 @@
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { ConvexError, v } from "convex/values";
 
 const images = [
@@ -207,6 +207,26 @@ export const unfavorite = mutation({
       }
 
       await ctx.db.delete(existingFavorite._id);
+    } catch (error) {
+      throw new ConvexError("Oops! Something went wrong!");
+    }
+  },
+});
+
+export const get = query({
+  args: {
+    id: v.id("boards"),
+  },
+  async handler(ctx, args) {
+    const boardId = args.id;
+
+    if (!boardId) {
+      throw new ConvexError("Invalid data!");
+    }
+
+    try {
+      const board = await ctx.db.get(boardId);
+      return board;
     } catch (error) {
       throw new ConvexError("Oops! Something went wrong!");
     }
