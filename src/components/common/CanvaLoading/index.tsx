@@ -1,7 +1,7 @@
 import Loading from "../Loading";
-import CanvaInfo from "@/components/features/Canva/Info";
-import CanvaParticipant from "@/components/features/Canva/Participant";
-import CanvaToolbar from "@/components/features/Canva/Toolbar";
+import CanvaInfo from "@/components/features/Canvas/Info";
+import CanvaParticipant from "@/components/features/Canvas/Participant";
+import CanvaToolbar from "@/components/features/Canvas/Toolbar";
 
 const CanvaLoading = () => {
   return (

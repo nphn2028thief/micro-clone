@@ -1,8 +1,16 @@
+"use client";
+
+import { useSelf } from "../../../../liveblocks.config";
+
 import CanvaInfo from "./Info";
 import CanvaParticipant from "./Participant";
 import CanvaToolbar from "./Toolbar";
 
-const Canva = ({ id }: { id: string }) => {
+const Canvas = ({ id }: { id: string }) => {
+  const info = useSelf((me) => me.info);
+
+  console.log({ info });
+
   return (
     <main className="w-full h-full relative bg-neutral-100 touch-none">
       <CanvaInfo />
@@ -12,4 +20,4 @@ const Canva = ({ id }: { id: string }) => {
   );
 };
 
-export default Canva;
+export default Canvas;
