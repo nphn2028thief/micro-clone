@@ -10,7 +10,6 @@ import EmptyFavorite from "@/components/common/EmptyFavorite";
 import EmptyBoard from "@/components/common/EmptyBoard";
 import NewBoardButton from "../NewBoardButton";
 import BoardItem from "./BoardItem";
-import RenameModal from "@/components/modals/Rename";
 import { EPath } from "@/constants/path";
 
 interface IProps {
@@ -71,8 +70,6 @@ const BoardList = (props: IProps) => {
           <BoardItem key={item._id} data={item} />
         ))}
       </div>
-
-      <RenameModal />
     </div>
   );
 };
