@@ -1,19 +1,11 @@
-"use client";
-
-import { useSelf } from "../../../../liveblocks.config";
-
 import CanvaInfo from "./Info";
 import CanvaParticipant from "./Participant";
 import CanvaToolbar from "./Toolbar";
 
-const Canvas = ({ id }: { id: string }) => {
-  const info = useSelf((me) => me.info);
-
-  console.log({ info });
-
+const Canvas = ({ boardId }: { boardId: string }) => {
   return (
     <main className="w-full h-full relative bg-neutral-100 touch-none">
-      <CanvaInfo />
+      <CanvaInfo boardId={boardId} />
       <CanvaParticipant />
       <CanvaToolbar />
     </main>

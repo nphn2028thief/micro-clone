@@ -5,7 +5,7 @@ import { IParams } from "@/types";
 const BoardDetailPage = ({ params }: { params: IParams }) => {
   return (
     <Room roomId={params.id}>
-      <Canvas id={params.id} />
+      <Canvas boardId={params.id} />
     </Room>
   );
 };

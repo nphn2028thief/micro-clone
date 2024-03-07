@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 
 import ConvexClientProvider from "@/providers/ConvexClientProvider";
+import ModalProvider from "@/providers/ModalProvider";
 import CheckScreen from "@/components/features/CheckScreen";
 
 import "./globals.css";
@@ -24,6 +25,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ConvexClientProvider>
           <CheckScreen>{children}</CheckScreen>
+          <ModalProvider />
           <Toaster position="top-center" />
         </ConvexClientProvider>
       </body>

@@ -1,4 +1,7 @@
+"use client";
+
 import { ReactNode } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { Link2, Pencil, Trash2 } from "lucide-react";
 import { DropdownMenuContentProps } from "@radix-ui/react-dropdown-menu";
 import toast from "react-hot-toast";
@@ -31,6 +34,9 @@ interface IProps {
 const Actions = (props: IProps) => {
   const { id, title, children, side, sideOffset } = props;
 
+  const pathname = usePathname();
+  const router = useRouter();
+
   const { onOpen } = useRenameModal();
 
   const { mutate, isPending } = useApiMutation<{ id: Id<"boards"> }>(
@@ -46,7 +52,12 @@ const Actions = (props: IProps) => {
 
   const handleDeleteBoard = () => {
     mutate({ id })
-      .then(() => toast.success("Board deleted!"))
+      .then(() => {
+        toast.success("Board deleted!");
+        if (pathname !== EPath.DASHBOARD) {
+          router.push(EPath.DASHBOARD);
+        }
+      })
       .catch(() => toast.error("Delete board failure!"));
   };
 
