@@ -16,7 +16,12 @@ const Room = (props: IProps) => {
   const { roomId, children } = props;
 
   return (
-    <RoomProvider id={roomId} initialPresence={{}}>
+    <RoomProvider
+      id={roomId}
+      initialPresence={{
+        cursor: null,
+      }}
+    >
       <ClientSideSuspense fallback={<CanvaLoading />}>
         {() => children}
       </ClientSideSuspense>
